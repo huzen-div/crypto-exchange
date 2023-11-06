@@ -1,0 +1,30 @@
+version: "3"
+services:
+  postgres:
+    image: postgres:11.4-alpine
+    deploy:
+      replicas: 1
+    volumes:
+      - ~/apps/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=P@ssw0rd
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+  pgadmin4:
+    user: root
+    image: dpage/pgadmin4:5.1
+    deploy:
+      replicas: 1
+    volumes:
+      - ./pgadmin/data/pgadmin:/var/lib/pgadmin:z
+    depends_on:
+      - postgres
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user_name@domain_name.com
+      - PGADMIN_DEFAULT_PASSWORD=P@ssw0rd
+    ports:
+      - "8080:80/tcp"
+    expose:
+      - "8080"
